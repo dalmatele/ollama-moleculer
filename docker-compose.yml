@@ -7,15 +7,13 @@ services:
     env_file: docker-compose.env
     environment:
       PORT: 3000
+      OLLAMA_HOST: http://localhost:11434
     depends_on:
       - nats
-      - redis
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.api-gw.rule=PathPrefix(`/`)"
-      - "traefik.http.services.api-gw.loadbalancer.server.port=3000"
+    ports:
+      - "3000:3000"
     networks:
-      - internal
+      - host
 
 
   nats:
@@ -23,26 +21,3 @@ services:
     command: ["-js"]
     networks:
       - internal
-
-  redis:
-    image: redis:alpine
-    networks:
-      - internal
-
-  traefik:
-    image: traefik:v3.3
-    command:
-      - "--api.insecure=true" # Don't do that in production!
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-    ports:
-      - 3000:80
-      - 3001:8080
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    networks:
-      - internal
-      - default
-
-networks:
-  internal:

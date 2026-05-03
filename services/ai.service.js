@@ -3,6 +3,7 @@ const config = require("../config/config");
 const axios = require("axios");
 const jwt = require("jsonwebtoken");
 const {MoleculerError} = require("moleculer").Errors
+const OLLAMA_URL = process.env.OLLAMA_URL || "http://localhost:11434";
 
 module.exports = {
     name: "ai",
@@ -17,7 +18,7 @@ module.exports = {
                         return { error: "Missing prompt" };
                     }
                     const response = await axios.post(
-                        "http://localhost:11434/api/generate",
+                        `${OLLAMA_URL}/api/generate`,
                         {
                             model,
                             prompt,
