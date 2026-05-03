@@ -8,5 +8,5 @@ services:
     environment:
       PORT: 3000
       OLLAMA_HOST: http://localhost:11434
-    networks_mode: host
+    network_mode: host
     restart: always
