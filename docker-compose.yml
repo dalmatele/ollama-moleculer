@@ -8,16 +8,7 @@ services:
     environment:
       PORT: 3000
       OLLAMA_HOST: http://localhost:11434
-    depends_on:
-      - nats
     ports:
       - "3000:3000"
     networks:
       - host
-
-
-  nats:
-    image: nats:2
-    command: ["-js"]
-    networks:
-      - internal
