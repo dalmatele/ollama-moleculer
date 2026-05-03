@@ -6,7 +6,7 @@ services:
     image: moleculer-ollama
     env_file: docker-compose.env
     environment:
-      PORT: 3000
+      PORT: 80
       OLLAMA_HOST: http://localhost:11434
     network_mode: host
     restart: always
