@@ -1,0 +1,50 @@
+{
+  "name": "moleculer-ollama",
+  "version": "1.0.0",
+  "description": "My Moleculer-based microservices project",
+  "scripts": {
+    "dev": "moleculer-runner --repl --hot services/*.service.js --env",
+    "start": "moleculer-runner services --env",
+    "cli": "moleculer connect NATS",
+    "ci": "jest --watch",
+    "test": "jest --coverage",
+    "dc:up": "docker compose up --build -d",
+    "dc:logs": "docker compose logs -f",
+    "dc:down": "docker compose down"
+  },
+  "keywords": [
+    "microservices",
+    "moleculer"
+  ],
+  "author": "",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-cli": "^29.7.0",
+    "moleculer-repl": "^0.8.0",
+    "supertest": "^7.1.1"
+  },
+  "dependencies": {
+    "@moleculer/channels": "^0.3.1",
+    "@moleculer/workflows": "^0.2.1",
+    "axios": "^1.16.0",
+    "dotenv": "^17.4.2",
+    "include-all": "^4.0.3",
+    "ioredis": "^5.6.1",
+    "jsonwebtoken": "^9.0.3",
+    "lodash": "^4.17.21",
+    "moleculer": "^0.15.0",
+    "moleculer-web": "^0.11.0",
+    "nats": "^2.29.3"
+  },
+  "engines": {
+    "node": ">= 22.x.x"
+  },
+  "jest": {
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node",
+    "rootDir": "./services",
+    "roots": [
+      "../test"
+    ]
+  }
+}

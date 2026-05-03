@@ -1,0 +1,179 @@
+#########################################################
+# Common Environment variables ConfigMap
+#########################################################
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: common-env
+data:
+  NAMESPACE: ""
+  LOGLEVEL: info
+  SERVICEDIR: services
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  CHANNEL_URL: nats://nats:4222
+  
+  
+  
+  WORKFLOWS_URL: redis://redis:6379
+
+---
+#########################################################
+# Service for Moleculer API Gateway service
+#########################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: services
+spec:
+  selector:
+    app: services
+  ports:
+  - port: 3000
+    targetPort: 3000
+
+---
+#########################################################
+# Ingress for Moleculer API Gateway
+#########################################################
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress
+spec:
+  rules:
+  - host: moleculer-ollama.127.0.0.1.nip.io
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: services
+            port: 
+              number: 3000
+
+---
+#########################################################
+# Moleculer services
+#########################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: services
+spec:
+  selector:
+    matchLabels:
+      app: services
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: services
+    spec:
+      containers:
+      - name: services
+        image: moleculer-ollama
+        imagePullPolicy: IfNotPresent
+        envFrom:
+        - configMapRef:
+            name: common-env
+
+
+---
+#########################################################
+# NATS transporter service
+#########################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: nats
+spec:
+  selector:
+    app: nats
+  ports:
+  - port: 4222
+    name: nats
+    targetPort: 4222
+
+---
+#########################################################
+# NATS transporter
+#########################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nats
+spec:
+  selector:
+    matchLabels:
+      app: nats
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: nats
+    spec:
+      containers:
+      - name: nats
+        image: nats
+        args: ["-js"]
+        ports:
+        - containerPort: 4222
+          name: nats
+
+---
+#########################################################
+# Redis service
+#########################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+spec:
+  selector:
+    app: redis
+  ports:
+  - port: 6379
+    name: redis
+    targetPort: 6379
+
+---
+#########################################################
+# Redis server (transporter/cacher)
+#########################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+spec:
+  selector:
+    matchLabels:
+      app: redis
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis
+        ports:
+        - containerPort: 6379
+          name: redis
+
+
+
+
