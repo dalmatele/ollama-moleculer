@@ -11,6 +11,7 @@ module.exports = {
     actions: {
         chat: {
             params: {},
+            timeout: 130000,
             async handler(ctx){
                 try{
                     const {prompt, model = "qwen2:7b" } = ctx.params;
