@@ -20,12 +20,17 @@
 <div id="chat"></div>
 
 <input id="input" placeholder="Nhập câu hỏi..." />
+<input id=""token" placeholder="Nhập token..." />
 <button onclick="send()">Gửi</button>
 
 <script>
 async function send() {
   const input = document.getElementById("input");
   const chat = document.getElementById("chat");
+  const token = document.getElementById("token");
+  if(!token){
+    addMessage("AI", "Vui lòng nhập token trước khi tiếp tục");
+  }
 
   const text = input.value.trim();
   if (!text) return;
@@ -36,7 +41,8 @@ async function send() {
   const res = await fetch("https://ai.hublock.vn/api/private/chat", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + token
     },
     body: JSON.stringify({
       prompt: text
