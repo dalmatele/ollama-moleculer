@@ -40,13 +40,14 @@ module.exports = {
                         `${OLLAMA_URL}/api/chat`,
                         {
                             model,
-                            prompt: prompts,
+                            message: prompts,
                             stream: false
                         },
                         {
                             timeout: 120000
                         }
                     );
+                    console.log(response.data)
                     const transaction = await sequelize.transaction();
                     try{
                         let item = {
