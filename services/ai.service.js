@@ -61,7 +61,7 @@ module.exports = {
                             userId: ctx.params.userId,
                             sessionId: ctx.params.sessionId,
                             aiId: ctx.params.aiId,
-                            content: response.data.response,
+                            content: response.data.message.content,
                             isUser: false
                         }
                         await ChatDB.create(item, transaction);
