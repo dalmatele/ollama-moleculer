@@ -26,13 +26,43 @@ module.exports = {
                         return { error: "Missing prompt" };
                     }
                     const ChatDB = new Chat();
+                    
+                    //get history chat of user
+                    const histories = await ChatDB.getUserChatHistory(ctx.params.userId, ctx.params.sessionId, ctx.params.aiId);
+                    const prompts = [];
+                    for(let i = 0; i < histories.length; i++){
+                        prompts.push({
+                            role: histories[i].isUser ? "user" : "assistant",
+                            content: histories[i].content
+                        });
+                    }
+                    const response = await axios.post(
+                        `${OLLAMA_URL}/api/generate`,
+                        {
+                            model,
+                            prompt: prompts,
+                            stream: false
+                        },
+                        {
+                            timeout: 120000
+                        }
+                    );
                     const transaction = await sequelize.transaction();
                     try{
-                        const item = {
+                        let item = {
                             userId: ctx.params.userId,
                             sessionId: ctx.params.sessionId,
                             aiId: ctx.params.aiId,
-                            content: prompt
+                            content: prompt,
+                            isUser: true
+                        }
+                        await ChatDB.create(item, transaction);
+                        item = {
+                            userId: ctx.params.userId,
+                            sessionId: ctx.params.sessionId,
+                            aiId: ctx.params.aiId,
+                            content: response.data.response,
+                            isUser: false
                         }
                         await ChatDB.create(item, transaction);
                         await transaction.commit();
@@ -40,24 +70,6 @@ module.exports = {
                         await transaction.rollback();
                         throw generateError(err);
                     }
-                    //get history chat of user
-                    const histories = await ChatDB.getUserChatHistory(ctx.params.userId, ctx.params.sessionId, ctx.params.aiId);
-                    const prompts = [];
-                    for(let i = 0; i < histories.length; i++){
-                        prompts.push(histories[i].dataValues.content);
-                    }
-                    let content = prompts.join("\n") + "\n" + prompt;
-                    const response = await axios.post(
-                        `${OLLAMA_URL}/api/generate`,
-                        {
-                            model,
-                            prompt: content,
-                            stream: false
-                        },
-                        {
-                            timeout: 120000
-                        }
-                    );
                     return {
                         success: true,
                         data: response.data.response

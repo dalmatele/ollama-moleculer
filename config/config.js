@@ -18,8 +18,7 @@ let config = {
                 min: 1,
                 idle: 10000
             },
-            // logging: console.log
-            logging: process.env.SQL_LOG === "true" ? true : false
+            logging: console.log
             // timezone: "+07:00"
         }
     },
