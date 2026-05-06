@@ -4,7 +4,25 @@ let config = {
     secretPassword: process.env.SECRET_PASSWORD,
     token_lifetime: process.env.TOKEN_LIFETIME,
     username: process.env.USERNAME,
-    password: process.env.PASSWORD
+    password: process.env.PASSWORD,
+    sql: {
+        database: process.env.DB_NAME,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        options: {
+            host: process.env.DB_HOST,
+            dialect: "mysql",
+            port: process.env.DB_PORT,
+            pool: {
+                max: 20,
+                min: 1,
+                idle: 10000
+            },
+            // logging: console.log
+            logging: process.env.SQL_LOG === "true" ? true : false
+            // timezone: "+07:00"
+        }
+    },
 }
 
 let mappingConfig = {};

@@ -4,6 +4,8 @@ const ChannelMiddleware = require("@moleculer/channels").Middleware;
 const ChannelTracing = require("@moleculer/channels").Tracing;
 
 const WorkflowsMiddleware = require("@moleculer/workflows").Middleware;
+const config = require("./config/config");
+
 
 /**
  * Moleculer ServiceBroker configuration file
@@ -230,7 +232,7 @@ module.exports = {
 
 	// Called after broker started.
 	async started(broker) {
-
+		const pool = require("./models/connection").init();
 	},
 
 	// Called after broker stopped.
