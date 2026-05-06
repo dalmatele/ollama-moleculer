@@ -40,7 +40,7 @@ module.exports = {
                         `${OLLAMA_URL}/api/chat`,
                         {
                             model,
-                            message: prompts,
+                            messages: prompts,
                             stream: false
                         },
                         {
