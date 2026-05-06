@@ -47,7 +47,7 @@ module.exports = {
                             timeout: 120000
                         }
                     );
-                    console.log(response.data)
+                    console.log(prompts);
                     const transaction = await sequelize.transaction();
                     try{
                         let item = {
