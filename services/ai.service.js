@@ -72,7 +72,7 @@ module.exports = {
                     }
                     return {
                         success: true,
-                        data: response.data.response
+                        data: response.data.message.content
                     }
                 }catch(error){
                     throw generateError(error);
