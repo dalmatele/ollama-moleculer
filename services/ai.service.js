@@ -36,6 +36,10 @@ module.exports = {
                             content: histories[i].content
                         });
                     }
+                    prompts.push({
+                        role: "user",
+                        content: prompt
+                    });
                     const response = await axios.post(
                         `${OLLAMA_URL}/api/chat`,
                         {
