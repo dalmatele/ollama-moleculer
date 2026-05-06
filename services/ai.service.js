@@ -11,9 +11,11 @@ module.exports = {
     actions: {
         chat: {
             params: {},
+            timeout: 130000,
             async handler(ctx){
                 try{
-                    const {prompt, model = "qwen2:7b" } = ctx.params;
+                    // const {prompt, model = "qwen2.5:7b" } = ctx.params;
+                    const {prompt, model = "ai-concierge" } = ctx.params;
                     if(!prompt){
                         return { error: "Missing prompt" };
                     }
