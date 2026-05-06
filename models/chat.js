@@ -8,7 +8,7 @@ class Chat extends Database {
                 sessionId: sessionId,
                 aiId: aiId
             },
-            order: [["createdAt", "DESC"]],
+            order: [["createdAt", "ASC"]],
             limit: 20           
         });
     }
