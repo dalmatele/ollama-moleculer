@@ -32,7 +32,7 @@ module.exports = {
                             userId: ctx.params.userId,
                             sessionId: ctx.params.sessionId,
                             aiId: ctx.params.aiId,
-                            prompt: prompt
+                            content: prompt
                         }
                         await ChatDB.create(item, transaction);
                         await transaction.commit();
