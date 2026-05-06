@@ -29,6 +29,7 @@
     "@moleculer/workflows": "^0.2.1",
     "axios": "^1.16.0",
     "dotenv": "^17.4.2",
+    "env-cmd": "^11.0.0",
     "include-all": "^4.0.3",
     "ioredis": "^5.6.1",
     "jsonwebtoken": "^9.0.3",
