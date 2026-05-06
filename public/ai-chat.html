@@ -22,47 +22,61 @@
 <input id="input" placeholder="Nhập câu hỏi..." />
 <button onclick="send()">Gửi</button>
 <input id="token" placeholder="Nhập token..."  type="password"/>
+<input type="hidden" id="userid" />
+<input type="hidden" id="sessionid" />
+<input type="hidden" id="aiid" />
 
 <script>
-async function send() {
-  const input = document.getElementById("input");
-  const chat = document.getElementById("chat");
-  const tokenInput = document.getElementById("token");
-  const token = tokenInput.value.trim();
-  if(!token){
-    addMessage("AI", "Vui lòng nhập token trước khi tiếp tục");
+  async function send() {
+    const input = document.getElementById("input");
+    const chat = document.getElementById("chat");
+    const tokenInput = document.getElementById("token");
+    const token = tokenInput.value.trim();
+    if(!token){
+      addMessage("AI", "Vui lòng nhập token trước khi tiếp tục");
+    }
+
+    const text = input.value.trim();
+    if (!text) return;
+
+    addMessage("Bạn", text, "user");
+    input.value = "";
+
+    const res = await fetch("https://ai.hublock.vn/api/private/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
+      },
+      body: JSON.stringify({
+        prompt: text,
+        userId: document.getElementById("userid").value,
+        sessionId: document.getElementById("sessionid").value,
+        aiId: document.getElementById("aiid").value
+      })
+    });
+
+    const data = await res.json();
+
+    addMessage("AI", data.data || "Lỗi", "bot");
   }
 
-  const text = input.value.trim();
-  if (!text) return;
-
-  addMessage("Bạn", text, "user");
-  input.value = "";
-
-  const res = await fetch("https://ai.hublock.vn/api/private/chat", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + token
-    },
-    body: JSON.stringify({
-      prompt: text
-    })
-  });
-
-  const data = await res.json();
-
-  addMessage("AI", data.data || "Lỗi", "bot");
-}
-
-function addMessage(sender, text, cls) {
-  const chat = document.getElementById("chat");
-  const div = document.createElement("div");
-  div.className = "msg " + cls;
-  div.innerHTML = "<b>" + sender + ":</b> " + text;
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
-}
+  function addMessage(sender, text, cls) {
+    const chat = document.getElementById("chat");
+    const div = document.createElement("div");
+    div.className = "msg " + cls;
+    div.innerHTML = "<b>" + sender + ":</b> " + text;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+  }
+  function randomId(prefix){
+    return prefix + "_" + Math.random().toString(36).substring(2,10) + Date.now();
+  }
+  window.onload = function(){
+    document.getElementById("userid").value = randomId("user");
+    document.getElementById("sessionid").value = randomId("sess");
+    document.getElementById("aiid").value = randomId("ai");
+  };
 </script>
 
 </body>
