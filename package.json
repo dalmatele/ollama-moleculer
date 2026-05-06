@@ -11,7 +11,7 @@
     "dc:up": "docker compose up --build -d",
     "dc:logs": "docker compose logs -f",
     "dc:down": "docker compose down",
-    "generate-schema": "env-cmd node initScripts/migrateData.js"
+    "generate-schema": "env-cmd node scripts/migrateData.js"
   },
   "keywords": [
     "microservices",
