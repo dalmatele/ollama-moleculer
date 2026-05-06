@@ -16,3 +16,4 @@ services:
       MARIADB_USER: root
       MARIADB_PASSWORD: mariadb
       MARIADB_DATABASE: chat-ai
+      MARIADB_ROOT_PASSWORD: mariadb
