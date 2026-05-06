@@ -37,7 +37,7 @@ module.exports = {
                         });
                     }
                     const response = await axios.post(
-                        `${OLLAMA_URL}/api/generate`,
+                        `${OLLAMA_URL}/api/chat`,
                         {
                             model,
                             prompt: prompts,
